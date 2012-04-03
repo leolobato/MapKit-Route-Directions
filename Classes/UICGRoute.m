@@ -30,10 +30,20 @@
 	self = [super init];
 	if (self != nil) {
 		dictionaryRepresentation = [dictionary retain];
-        NSArray *allKeys = [dictionaryRepresentation allKeys];
-        NSDictionary *k = [dictionaryRepresentation objectForKey:[allKeys objectAtIndex:[allKeys count] - 1]];
-		NSArray *stepDics = [k objectForKey:@"Steps"];
-		numerOfSteps = [stepDics count];
+        NSSet * setOfKeys = [dictionaryRepresentation keysOfEntriesPassingTest:^(id key, id obj, BOOL * stop){
+            if ([obj isKindOfClass:[NSDictionary class]]) {
+                for (NSString *keyString in [obj allKeys]) {
+                    if ([keyString isEqualToString:@"Steps"]) {
+                        *stop=YES;
+                        return YES;
+                    }
+                }
+            }
+            return NO;
+        }];
+        NSDictionary * k = [dictionaryRepresentation objectForKey:[setOfKeys anyObject]];
+        NSArray * stepDics = [k objectForKey:@"Steps"];
+        numerOfSteps = [stepDics count];
 		steps = [[NSMutableArray alloc] initWithCapacity:numerOfSteps];
 		for (NSDictionary *stepDic in stepDics) {
 			[(NSMutableArray *)steps addObject:[UICGStep stepWithDictionaryRepresentation:stepDic]];
