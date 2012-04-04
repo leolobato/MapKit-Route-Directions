@@ -39,9 +39,9 @@
 		} else {
 			polylineIndex = [index integerValue];
 		}
-		descriptionHtml = [dictionaryRepresentation objectForKey:@"descriptionHtml"];
-		distance = [dictionaryRepresentation objectForKey:@"Distance"];
-		duration = [dictionaryRepresentation objectForKey:@"Duration"];
+		descriptionHtml = [[dictionaryRepresentation objectForKey:@"descriptionHtml"] copy];
+		distance = [[dictionaryRepresentation objectForKey:@"Distance"] copy];
+		duration = [[dictionaryRepresentation objectForKey:@"Duration"] copy];
 	}
 	return self;
 }

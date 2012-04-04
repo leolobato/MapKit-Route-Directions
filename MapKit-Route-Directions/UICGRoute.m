@@ -52,14 +52,14 @@
 		endGeocode = [dictionaryRepresentation objectForKey:@"MJ"];
 		startGeocode = [dictionaryRepresentation objectForKey:@"dT"];
 		
-		distance = [k objectForKey:@"Distance"];
-		duration = [k objectForKey:@"Duration"];
-		NSDictionary *endLocationDic = [k objectForKey:@"End"];
-		NSArray *coordinates = [endLocationDic objectForKey:@"coordinates"];
+		distance = [[k objectForKey:@"Distance"] copy];
+		duration = [[k objectForKey:@"Duration"] copy];
+		NSDictionary *endLocationDic = [[k objectForKey:@"End"] copy];
+		NSArray *coordinates = [[endLocationDic objectForKey:@"coordinates"] copy];
 		CLLocationDegrees longitude = [[coordinates objectAtIndex:0] doubleValue];
 		CLLocationDegrees latitude  = [[coordinates objectAtIndex:1] doubleValue];
 		endLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
-		summaryHtml = [k objectForKey:@"summaryHtml"];
+		summaryHtml = [[k objectForKey:@"summaryHtml"] copy];
 		polylineEndIndex = [[k objectForKey:@"polylineEndIndex"] integerValue];
 	}
 	return self;
