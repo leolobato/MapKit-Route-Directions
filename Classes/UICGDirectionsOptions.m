@@ -16,6 +16,7 @@
 @synthesize getPolyline;
 @synthesize getSteps;
 @synthesize preserveViewport;
+@synthesize optimizeWaypoints;
 
 - (id)init {
 	self = [super init];
@@ -43,7 +44,8 @@
 			avoidHighways ? @"true" : @"false",
 			getPolyline ? @"true" : @"false",
 			getSteps ? @"true" : @"false",	
-			preserveViewport ? @"true" : @"false"];
+			preserveViewport ? @"true" : @"false",	
+			optimizeWaypoints ? @"true" : @"false"];
 }
 
 @end

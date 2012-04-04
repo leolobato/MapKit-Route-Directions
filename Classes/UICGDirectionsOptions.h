@@ -20,6 +20,7 @@ typedef enum UICGTravelModes {
 	BOOL getPolyline;
 	BOOL getSteps;
 	BOOL preserveViewport;
+    BOOL optimizeWaypoints;
 }
 
 @property (nonatomic, retain) NSLocale *locale;
@@ -28,5 +29,6 @@ typedef enum UICGTravelModes {
 @property (nonatomic) BOOL getPolyline;
 @property (nonatomic) BOOL getSteps;
 @property (nonatomic) BOOL preserveViewport;
+@property (nonatomic) BOOL optimizeWaypoints;
 
 @end
