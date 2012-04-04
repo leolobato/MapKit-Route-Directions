@@ -183,6 +183,8 @@
 		14C8839E1031A61700079F9E /* Google Maps API */ = {
 			isa = PBXGroup;
 			children = (
+				14C87D94102F260A00079F9E /* api.html */,
+				14F7E02F11020DB400D74BF0 /* json2.js */,
 				14C87D38102F1FD500079F9E /* UICGDirections.h */,
 				14C87D39102F1FD500079F9E /* UICGDirections.m */,
 				14C87D3C102F20AD00079F9E /* UICGDirectionsOptions.h */,
@@ -244,8 +246,6 @@
 				2899E55F0DE3E45000AC0155 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* MapDirections-Info.plist */,
-				14C87D94102F260A00079F9E /* api.html */,
-				14F7E02F11020DB400D74BF0 /* json2.js */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
