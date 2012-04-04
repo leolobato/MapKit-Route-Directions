@@ -124,11 +124,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
+		080E96DDFE201D6D7F000001 /* Sample Project Classes */ = {
 			isa = PBXGroup;
 			children = (
-				14C87D3B102F1FD900079F9E /* Library */,
-				14C87D73102F25BF00079F9E /* JSON */,
 				1D3623240D0F684500981E51 /* MapDirectionsAppDelegate.h */,
 				1D3623250D0F684500981E51 /* MapDirectionsAppDelegate.m */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
@@ -138,16 +136,17 @@
 				14C8852D1031CA0700079F9E /* RouteListViewController.h */,
 				14C8852E1031CA0700079F9E /* RouteListViewController.m */,
 			);
+			name = "Sample Project Classes";
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		14C87D3B102F1FD900079F9E /* Library */ = {
+		14C87D3B102F1FD900079F9E /* MapKit-Route-Directions */ = {
 			isa = PBXGroup;
 			children = (
 				14C8839E1031A61700079F9E /* Google Maps API */,
 				14C8839D1031A5A200079F9E /* MapKit Extention */,
 			);
-			name = Library;
+			path = "MapKit-Route-Directions";
 			sourceTree = "<group>";
 		};
 		14C87D73102F25BF00079F9E /* JSON */ = {
@@ -167,7 +166,7 @@
 				14C87D86102F25E400079F9E /* SBJsonWriter.h */,
 				14C87D87102F25E400079F9E /* SBJsonWriter.m */,
 			);
-			name = JSON;
+			path = JSON;
 			sourceTree = "<group>";
 		};
 		14C8839D1031A5A200079F9E /* MapKit Extention */ = {
@@ -213,7 +212,9 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				080E96DDFE201D6D7F000001 /* Classes */,
+				14C87D3B102F1FD900079F9E /* MapKit-Route-Directions */,
+				14C87D73102F25BF00079F9E /* JSON */,
+				080E96DDFE201D6D7F000001 /* Sample Project Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
