@@ -31,7 +31,7 @@
 		NSArray *coordinates = [point objectForKey:@"coordinates"];
 		CLLocationDegrees latitude  = [[coordinates objectAtIndex:0] doubleValue];
 		CLLocationDegrees longitude = [[coordinates objectAtIndex:1] doubleValue];
-		location = [[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] autorelease];
+		location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
 		
 		id index = [dictionaryRepresentation objectForKey:@"polylineIndex"];
 		if (index == [NSNull null]) {
