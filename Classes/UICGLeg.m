@@ -5,8 +5,8 @@
 @property (nonatomic, retain) NSArray *steps;
 @property (nonatomic, retain) NSDictionary *duration;
 @property (nonatomic, retain) NSDictionary *distance;
-@property (nonatomic, retain) NSDictionary *startLocation;
-@property (nonatomic, retain) NSDictionary *endLocation;
+@property (nonatomic, retain) CLLocation *startLocation;
+@property (nonatomic, retain) CLLocation *endLocation;
 @property (nonatomic, retain) NSString *startAddress;
 @property (nonatomic, retain) NSString *endAddress;
 @property (nonatomic, retain) NSArray *viaWaypoint;
@@ -28,16 +28,15 @@
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary {
 	self = [super init];
 	if (self != nil) {
-		
 		self.duration = [dictionary valueForKey:@"duration"];
 		self.distance = [dictionary valueForKey:@"distance"];
-		NSDictionary *startLocationDict = [dictionary valueForKeyPath:@"bounds.southwest"];
-		CLLocationDegrees longitudeS = [[startLocationDict objectForKey:@"lat"] doubleValue];
-		CLLocationDegrees latitudeS  = [[startLocationDict objectForKey:@"lng"] doubleValue];							 
+		NSDictionary *startLocationDict = [dictionary objectForKey:@"start_location"];
+		CLLocationDegrees latitudeS  = [[startLocationDict objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees longitudeS = [[startLocationDict objectForKey:@"lng"] doubleValue];
 		self.startLocation = [[[CLLocation alloc] initWithLatitude:latitudeS longitude:longitudeS]autorelease];
-		NSDictionary *endLocationDict = [dictionary valueForKeyPath:@"bounds.northeast"];
-		CLLocationDegrees longitudeE = [[endLocationDict objectForKey:@"lat"] doubleValue];
-		CLLocationDegrees latitudeE  = [[endLocationDict objectForKey:@"lng"] doubleValue];							 
+		NSDictionary *endLocationDict =[dictionary objectForKey:@"end_location"];
+		CLLocationDegrees latitudeE  = [[endLocationDict objectForKey:@"lat"] doubleValue];	
+		CLLocationDegrees longitudeE = [[endLocationDict objectForKey:@"lng"] doubleValue];
 		self.endLocation = [[[CLLocation alloc] initWithLatitude:latitudeE longitude:longitudeE]autorelease];
 		self.startAddress = [dictionary valueForKey:@"start_address"];
 		self.endAddress = [dictionary valueForKey:@"end_address"];

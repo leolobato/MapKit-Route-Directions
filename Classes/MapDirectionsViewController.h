@@ -16,9 +16,6 @@
 	MKMapView *routeMapView;
 	UICRouteOverlayMapView *routeOverlayView;
 	UICGDirections *diretions;
-	NSString *startPoint;
-	NSString *endPoint;
-	NSArray *wayPoints;
 	UICGTravelModes travelMode;
 }
 

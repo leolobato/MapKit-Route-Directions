@@ -40,12 +40,12 @@
 		self.waypointOrder = [dictionary objectForKey:@"waypoint_order"];
 		self.warnings = [dictionary objectForKey:@"warnings"];
 		NSDictionary *southwestBounds = [dictionary valueForKeyPath:@"bounds.southwest"];
-		CLLocationDegrees longitudeSW = [[southwestBounds objectForKey:@"lat"] doubleValue];
-		CLLocationDegrees latitudeSW  = [[southwestBounds objectForKey:@"lng"] doubleValue];							 
+		CLLocationDegrees latitudeSW  = [[southwestBounds objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees longitudeSW = [[southwestBounds objectForKey:@"lng"] doubleValue];
 		self.souhtwestLocation = [[[CLLocation alloc] initWithLatitude:latitudeSW longitude:longitudeSW]autorelease];
 		NSDictionary *northeastBounds = [dictionary valueForKeyPath:@"bounds.northeast"];
-		CLLocationDegrees longitudeNE = [[northeastBounds objectForKey:@"lat"] doubleValue];
-		CLLocationDegrees latitudeNE  = [[northeastBounds objectForKey:@"lng"] doubleValue];							 
+		CLLocationDegrees latitudeNE  = [[northeastBounds objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees longitudeNE = [[northeastBounds objectForKey:@"lng"] doubleValue];
 		self.northeastLocation = [[[CLLocation alloc] initWithLatitude:latitudeNE longitude:longitudeNE]autorelease];
 		
 		NSArray *legsDict = [dictionary valueForKey:@"legs"];

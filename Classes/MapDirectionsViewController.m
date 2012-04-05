@@ -114,28 +114,39 @@
 	[routeOverlayView setRoutes:routePoints];
 	
 	// Add annotations
-	UICRouteAnnotation *startAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[[routePoints objectAtIndex:0] coordinate]
-																					title:startPoint
-																				 subtitle:self.startPoint
-																		   annotationType:UICRouteAnnotationTypeStart] autorelease];
-	UICRouteAnnotation *endAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[[routePoints lastObject] coordinate]
-																					title:endPoint
-																			   subtitle:self.endPoint
-																		   annotationType:UICRouteAnnotationTypeEnd] autorelease];
-	if ([wayPoints count] > 0) {
-		NSInteger numberOfRoutes = [directions numberOfRoutes];
-		for (NSInteger index = 0; index < numberOfRoutes; index++) {
-			UICGRoute *route = [directions routeAtIndex:index];
-			CLLocation *location = [[route legAtIndex:0] endLocation];
-			UICRouteAnnotation *annotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[location coordinate]
-																					   title:[[route.legs objectAtIndex:0]endAddress]
+	// here we can have multiple routes todo
+	NSInteger numberOfRoutes = [directions numberOfRoutes];
+	if (numberOfRoutes > 0) {
+		UICGRoute *route = [directions routeAtIndex:0];
+		
+		UICRouteAnnotation *startAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[[[route legAtIndex:0]startLocation]coordinate]
+																						title:[[route legAtIndex:0]startAddress]
+																					 subtitle:nil
+																			   annotationType:UICRouteAnnotationTypeStart] autorelease];
+		
+		[routeMapView addAnnotation:startAnnotation];
+		
+		for (NSInteger index = 0; index < route.numberOfLegs; index++) {
+			if (index == route.numberOfLegs - 1) {
+				break;
+			}
+			
+			UICGLeg *leg = [route legAtIndex:index];
+			UICRouteAnnotation *annotation = [[[UICRouteAnnotation alloc] initWithCoordinate:leg.endLocation.coordinate
+																					   title:leg.endAddress
 																					subtitle:nil
 																			  annotationType:UICRouteAnnotationTypeWayPoint] autorelease];
 			[routeMapView addAnnotation:annotation];
+			
 		}
-	}
 		
-	[routeMapView addAnnotations:[NSArray arrayWithObjects:startAnnotation, endAnnotation, nil]];
+		UICRouteAnnotation *endAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[[[route.legs lastObject]endLocation]coordinate]
+																					  title:[[route.legs lastObject]endAddress]
+																				   subtitle:nil
+																			 annotationType:UICRouteAnnotationTypeEnd] autorelease];
+		
+		[routeMapView addAnnotation:endAnnotation];
+	}
 }
 
 - (void)directions:(UICGDirections *)directions didFailWithMessage:(NSString *)message {
