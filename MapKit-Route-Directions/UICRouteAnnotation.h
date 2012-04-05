@@ -18,13 +18,13 @@ typedef enum UICRouteAnnotationType {
 @interface UICRouteAnnotation : NSObject<MKAnnotation> {
 	CLLocationCoordinate2D coordinate;
 	NSString *title;
+    NSString *subtitle;
 	UICRouteAnnotationType annotationType;
 }
 
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic) UICRouteAnnotationType annotationType;
-@property (nonatomic, retain) NSString *subtitle;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coord 
 				   title:(NSString *)aTitle 

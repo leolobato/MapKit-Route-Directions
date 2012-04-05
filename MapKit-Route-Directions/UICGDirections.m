@@ -8,7 +8,7 @@
 
 #import "UICGDirections.h"
 #import "UICGRoute.h"
-#import "JSON.h"
+#import "SBJson.h"
 
 static UICGDirections *sharedDirections;
 
