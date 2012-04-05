@@ -8,17 +8,24 @@
 
 #import "UICGRoute.h"
 
+@interface UICGRoute ()
+
+@property (nonatomic, retain) NSString *summary;
+@property (nonatomic, retain) NSArray *legs;
+@property (nonatomic, retain) UICGPolyline *overviewPolyline;
+@property (nonatomic, retain) NSArray *waypointOrder;
+@property (nonatomic, retain) NSArray *warnings;
+@property (nonatomic, retain) CLLocation *souhtwestLocation;
+@property (nonatomic, retain) CLLocation *northeastLocation;
+@property (nonatomic) NSInteger numberOfLegs;
+
+@end
+
+
 @implementation UICGRoute
 
-@synthesize dictionaryRepresentation;
-@synthesize numerOfSteps;
-@synthesize steps;
-@synthesize distance;
-@synthesize duration;
-@synthesize summaryHtml;
-@synthesize startGeocode;
-@synthesize endGeocode;
-@synthesize endLocation;
+@synthesize summary, legs, overviewPolyline, waypointOrder, warnings, souhtwestLocation;
+@synthesize northeastLocation, numberOfLegs;
 
 + (UICGRoute *)routeWithDictionaryRepresentation:(NSDictionary *)dictionary {
 	UICGRoute *route = [[UICGRoute alloc] initWithDictionaryRepresentation:dictionary];
@@ -28,46 +35,47 @@
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary {
 	self = [super init];
 	if (self != nil) {
-		dictionaryRepresentation = [dictionary retain];
-		NSArray *legs = [dictionaryRepresentation valueForKey:@"legs"];
-		if (legs.count > 0) {
-			NSDictionary *leg = [legs objectAtIndex:0];
-			NSArray *stepDics = [leg objectForKey:@"steps"];
-			numerOfSteps = [stepDics count];
-			steps = [[NSMutableArray alloc] initWithCapacity:numerOfSteps];
-			for (NSDictionary *stepDic in stepDics) {
-				[(NSMutableArray *)steps addObject:[UICGStep stepWithDictionaryRepresentation:stepDic]];
-			}
-			
-			endGeocode = [leg objectForKey:@"end_location"];
-			startGeocode = [leg objectForKey:@"start_location"];
-			
-			distance = [leg objectForKey:@"distance"];
-			duration = [leg objectForKey:@"duration"];
-			CLLocationDegrees longitude = [[endGeocode objectForKey:@"lat"] doubleValue];
-			CLLocationDegrees latitude  = [[endGeocode objectForKey:@"lng"] doubleValue];
-			endLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
-			summaryHtml = [dictionaryRepresentation objectForKey:@"summary"];
+		self.summary = [dictionary objectForKey:@"summary"];
+		self.overviewPolyline = [UICGPolyline polylineWithDictionaryRepresentation:[dictionary objectForKey:@"overview_polyline"]];
+		self.waypointOrder = [dictionary objectForKey:@"waypoint_order"];
+		self.warnings = [dictionary objectForKey:@"warnings"];
+		NSDictionary *southwestBounds = [dictionary valueForKeyPath:@"bounds.southwest"];
+		CLLocationDegrees longitudeSW = [[southwestBounds objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees latitudeSW  = [[southwestBounds objectForKey:@"lng"] doubleValue];							 
+		self.souhtwestLocation = [[[CLLocation alloc] initWithLatitude:latitudeSW longitude:longitudeSW]autorelease];
+		NSDictionary *northeastBounds = [dictionary valueForKeyPath:@"bounds.northeast"];
+		CLLocationDegrees longitudeNE = [[northeastBounds objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees latitudeNE  = [[northeastBounds objectForKey:@"lng"] doubleValue];							 
+		self.northeastLocation = [[[CLLocation alloc] initWithLatitude:latitudeNE longitude:longitudeNE]autorelease];
+		
+		NSArray *legsDict = [dictionary valueForKey:@"legs"];
+		self.legs = [NSMutableArray arrayWithCapacity:[legsDict count]];
+		for (NSDictionary *legDict in legsDict) {
+			[(NSMutableArray *)self.legs addObject:[UICGLeg legWithDictionaryRepresentation:legDict]];
 		}
-       
+		self.numberOfLegs = self.legs.count;	
 	}
 	return self;
 }
 
-- (void)dealloc {
-	[dictionaryRepresentation release];
-	[steps release];
-	[distance release];
-	[duration release];
-	[summaryHtml release];
-	[startGeocode release];
-	[endGeocode release];
-	[endLocation release];
-	[super dealloc];
+- (UICGLeg *)legAtIndex:(NSInteger)index {
+	if (index >= self.legs.count) {
+		return nil;
+	}
+	
+	return [self.legs objectAtIndex:index];;
 }
 
-- (UICGStep *)stepAtIndex:(NSInteger)index {
-	return [steps objectAtIndex:index];;
+- (void)dealloc {
+	[summary release];
+	[legs release];
+	[overviewPolyline release];
+	[waypointOrder release];
+	[warnings release];
+	[souhtwestLocation release];
+	[northeastLocation release];
+	
+	[super dealloc];
 }
 
 @end

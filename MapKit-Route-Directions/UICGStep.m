@@ -8,13 +8,23 @@
 
 #import "UICGStep.h"
 
+@interface UICGStep ()
+
+@property (nonatomic, retain) NSString *travelMode;
+@property (nonatomic, retain) CLLocation *startLocation;
+@property (nonatomic, retain) CLLocation *endLocation;
+@property (nonatomic, retain) UICGPolyline *polyline;
+@property (nonatomic, retain) NSDictionary *duration;
+@property (nonatomic, retain) NSString *htmlInstructions;
+@property (nonatomic, retain) NSDictionary *distance;
+
+@end
+
+
 @implementation UICGStep
 
-@synthesize dictionaryRepresentation;
-@synthesize location;
-@synthesize descriptionHtml;
-@synthesize distance;
-@synthesize duration;
+@synthesize travelMode, startLocation, endLocation, polyline, duration;
+@synthesize htmlInstructions, distance;
 
 + (UICGStep *)stepWithDictionaryRepresentation:(NSDictionary *)dictionary {
 	UICGStep *step = [[UICGStep alloc] initWithDictionaryRepresentation:dictionary];
@@ -24,26 +34,32 @@
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary {
 	self = [super init];
 	if (self != nil) {
-		dictionaryRepresentation = [dictionary retain];
-		
-		NSDictionary *endLocation = [dictionaryRepresentation objectForKey:@"end_location"];
-		CLLocationDegrees latitude  = [[endLocation objectForKey:@"lat"] doubleValue];
-		CLLocationDegrees longitude = [[endLocation objectForKey:@"lng"] doubleValue];
-		location = [[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] autorelease];
-		
-		descriptionHtml = [dictionaryRepresentation objectForKey:@"html_instructions"];
-		distance = [dictionaryRepresentation objectForKey:@"distance"];
-		duration = [dictionaryRepresentation objectForKey:@"duration"];
+		self.travelMode = [dictionary objectForKey:@"travel_mode"];
+		NSDictionary *startLocationDict = [dictionary valueForKeyPath:@"bounds.southwest"];
+		CLLocationDegrees longitudeS = [[startLocationDict objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees latitudeS  = [[startLocationDict objectForKey:@"lng"] doubleValue];							 
+		self.startLocation = [[[CLLocation alloc] initWithLatitude:latitudeS longitude:longitudeS]autorelease];
+		NSDictionary *endLocationDict = [dictionary valueForKeyPath:@"bounds.northeast"];
+		CLLocationDegrees longitudeE = [[endLocationDict objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees latitudeE  = [[endLocationDict objectForKey:@"lng"] doubleValue];							 
+		self.endLocation = [[[CLLocation alloc] initWithLatitude:latitudeE longitude:longitudeE]autorelease];
+		self.polyline = [UICGPolyline polylineWithDictionaryRepresentation:[dictionary objectForKey:@"polyline"]];
+		self.duration = [dictionary objectForKey:@"duration"];
+		self.htmlInstructions = [dictionary objectForKey:@"html_instructions"];
+		self.distance = [dictionary objectForKey:@"distance"];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[dictionaryRepresentation release];
-	[location release];
-	[descriptionHtml release];
-	[distance release];
+	[travelMode release];
+	[startLocation release];
+	[endLocation release];
+	[polyline release];
 	[duration release];
+	[htmlInstructions release];
+	[distance release];
+	
 	[super dealloc];
 }
 

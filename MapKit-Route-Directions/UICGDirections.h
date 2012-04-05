@@ -12,26 +12,15 @@
 #import "UICGPolyline.h"
 #import "GoogleMapApiServices.h"
 
-@class UICGDirections;
-
-@protocol UICGDirectionsDelegate<NSObject>
-@optional
-- (void)directionsDidUpdateDirections:(UICGDirections *)directions;
-- (void)directions:(UICGDirections *)directions didFailWithMessage:(NSString *)message;
-@end
+@protocol UICGDirectionsDelegate;
 
 @interface UICGDirections : NSObject {
 
 }
 
 @property (nonatomic, assign) id<UICGDirectionsDelegate> delegate;
-@property (nonatomic, retain) NSArray *routes;
-@property (nonatomic, retain) NSArray *geocodes;
-@property (nonatomic, retain) UICGPolyline *polyline;
-@property (nonatomic, retain) NSDictionary *distance;
-@property (nonatomic, retain) NSDictionary *duration;
-@property (nonatomic, retain) NSDictionary *status;
-@property (nonatomic, readonly) BOOL isInitialized;
+@property (nonatomic, readonly) NSString *status;
+@property (nonatomic, readonly) NSArray *routes;
 
 + (UICGDirections *)sharedDirections;
 - (id)init;
@@ -40,10 +29,15 @@
 
 @property (nonatomic, readonly) NSInteger numberOfRoutes;
 - (UICGRoute *)routeAtIndex:(NSInteger)index;
-@property (nonatomic, readonly) NSInteger numberOfGeocodes;
-- (NSDictionary *)geocodeAtIndex:(NSInteger)index;
 
 - (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options;
 - (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options;
 
 @end
+
+@protocol UICGDirectionsDelegate<NSObject>
+@optional
+- (void)directionsDidUpdateDirections:(UICGDirections *)directions;
+- (void)directions:(UICGDirections *)directions didFailWithMessage:(NSString *)message;
+@end
+

@@ -8,20 +8,20 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "UICGPolyline.h"
 
 @interface UICGStep : NSObject {
-	NSDictionary *dictionaryRepresentation;
-	CLLocation *location;
-	NSString *descriptionHtml;
-	NSDictionary *distance;
-	NSDictionary *duration;
+	
 }
 
-@property (nonatomic, retain, readonly) NSDictionary *dictionaryRepresentation;
-@property (nonatomic, retain, readonly) CLLocation *location;
-@property (nonatomic, retain, readonly) NSString *descriptionHtml;
-@property (nonatomic, retain, readonly) NSDictionary *distance;
+@property (nonatomic, retain, readonly) NSString *travelMode;
+@property (nonatomic, retain, readonly) CLLocation *startLocation;
+@property (nonatomic, retain, readonly) CLLocation *endLocation;
+@property (nonatomic, retain, readonly) UICGPolyline *polyline;
 @property (nonatomic, retain, readonly) NSDictionary *duration;
+@property (nonatomic, retain, readonly) NSString *htmlInstructions;
+@property (nonatomic, retain, readonly) NSDictionary *distance;
+
 
 + (UICGStep *)stepWithDictionaryRepresentation:(NSDictionary *)dictionary;
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary;

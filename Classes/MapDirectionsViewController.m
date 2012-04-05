@@ -109,8 +109,8 @@
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
 	// Overlay polylines
-	UICGPolyline *polyline = [directions polyline];
-	NSArray *routePoints = [polyline routePoints];
+	UICGPolyline *polyline = [[directions routeAtIndex:0] overviewPolyline];
+	NSArray *routePoints = [polyline points];
 	[routeOverlayView setRoutes:routePoints];
 	
 	// Add annotations
@@ -126,9 +126,9 @@
 		NSInteger numberOfRoutes = [directions numberOfRoutes];
 		for (NSInteger index = 0; index < numberOfRoutes; index++) {
 			UICGRoute *route = [directions routeAtIndex:index];
-			CLLocation *location = [route endLocation];
+			CLLocation *location = [[route legAtIndex:0] endLocation];
 			UICRouteAnnotation *annotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[location coordinate]
-																					   title:[[route endGeocode] objectForKey:@"address"]
+																					   title:[[route.legs objectAtIndex:0]endAddress]
 																					subtitle:nil
 																			  annotationType:UICRouteAnnotationTypeWayPoint] autorelease];
 			[routeMapView addAnnotation:annotation];

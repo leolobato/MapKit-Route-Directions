@@ -10,9 +10,6 @@
 #import <MapKit/MapKit.h>
 
 @interface UICRouteOverlayMapView : UIView {
-	MKMapView *inMapView;
-	NSArray *routes;
-	UIColor *lineColor;
 }
 
 - (id)initWithMapView:(MKMapView *)mapView;

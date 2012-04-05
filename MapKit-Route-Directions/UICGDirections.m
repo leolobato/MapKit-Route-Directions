@@ -10,19 +10,20 @@
 #import "UICGRoute.h"
 #import "SBJson.h"
 
+@interface UICGDirections ()
+
+//@property (nonatomic, retain) NSString *status;
+//@property (nonatomic, retain) NSArray *routes;
+@property (nonatomic) NSInteger numberOfRoutes;
+
+@end
+
+
 static UICGDirections *sharedDirections;
 
 @implementation UICGDirections
 
-@synthesize routes;
-@synthesize geocodes;
-@synthesize delegate;
-@synthesize polyline;
-@synthesize distance;
-@synthesize duration;
-@synthesize status;
-@synthesize isInitialized;
-@synthesize googleMapApiServices;
+@synthesize status, routes, delegate, googleMapApiServices, numberOfRoutes;
 
 + (UICGDirections *)sharedDirections {
 	if (!sharedDirections) {
@@ -63,16 +64,14 @@ static UICGDirections *sharedDirections;
 - (void)googleMapsAPIDidGetObject:(NSNotification *)notification 
 {
 	NSDictionary *dictionary = (NSDictionary *)[notification object];
-	NSArray *routeDics = [dictionary objectForKey:@"routes"];
-	routes = [[NSMutableArray alloc] initWithCapacity:[routeDics count]];
-	for (NSDictionary *routeDic in routeDics) {
-		[(NSMutableArray *)routes addObject:[UICGRoute routeWithDictionaryRepresentation:routeDic]];
-		self.polyline = [UICGPolyline polylineWithDictionaryRepresentation:[routeDic objectForKey:@"overview_polyline"]];
-	}
-	self.geocodes = [dictionary objectForKey:@"geocodes"];
-	self.distance = [dictionary objectForKey:@"distance"];
-	self.duration = [dictionary objectForKey:@"duration"];
-	self.status = [dictionary objectForKey:@"status"];
+	status = [[dictionary objectForKey:@"status"]retain]; 
+	
+	NSArray *routesDict = [dictionary objectForKey:@"routes"];
+	routes = [[NSMutableArray arrayWithCapacity:[routesDict count]]retain];
+	for (NSDictionary *routeDict in routesDict) {
+		[(NSMutableArray *)self.routes addObject:[UICGRoute routeWithDictionaryRepresentation:routeDict]];
+	}	
+	self.numberOfRoutes = self.routes.count;
 	
 	if ([self.delegate respondsToSelector:@selector(directionsDidUpdateDirections:)]) {
 		[self.delegate directionsDidUpdateDirections:self];
@@ -88,20 +87,12 @@ static UICGDirections *sharedDirections;
 	}
 }
 
-- (NSInteger)numberOfRoutes {
-	return [routes count];
-}
-
 - (UICGRoute *)routeAtIndex:(NSInteger)index {
-	return [routes objectAtIndex:index];
-}
-
-- (NSInteger)numberOfGeocodes {
-	return [geocodes count];
-}
-
-- (NSDictionary *)geocodeAtIndex:(NSInteger)index {
-	return [geocodes objectAtIndex:index];;
+	if (index >= self.routes.count) {
+		return nil;
+	}
+	
+	return [self.routes objectAtIndex:index];
 }
 
 - (void)dealloc 
@@ -110,10 +101,6 @@ static UICGDirections *sharedDirections;
 	
 	[googleMapApiServices release];
 	[routes release];
-	[geocodes release];
-	[polyline release];
-	[distance release];
-	[duration release];
 	[status release];
 	
 	[super dealloc];

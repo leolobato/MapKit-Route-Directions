@@ -10,19 +10,15 @@
 #import <CoreLocation/CoreLocation.h>
 
 @interface UICGPolyline : NSObject {
-	NSDictionary *dictionaryRepresentation;
-	NSMutableArray *routePoints;
-	NSInteger vertexCount;
-	NSInteger length;
+	
 }
 
-@property (nonatomic, retain, readonly) NSDictionary *dictionaryRepresentation;
-@property (nonatomic, retain, readonly) NSMutableArray *routePoints;
-@property (nonatomic, readonly) NSInteger vertexCount;
-@property (nonatomic, readonly) NSInteger length;
+@property (nonatomic, retain, readonly) NSArray *points;
+@property (nonatomic, readonly) NSInteger numberOfPoints;
 
 + (UICGPolyline *)polylineWithDictionaryRepresentation:(NSDictionary *)dictionary;
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary;
-- (CLLocation *)vertexAtIndex:(NSInteger)index;
+
+- (CLLocation *)pointAtIndex:(NSInteger)index;
 
 @end

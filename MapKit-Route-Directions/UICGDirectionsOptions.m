@@ -45,7 +45,7 @@
 	if (self.alternatives) {
 		output = [output stringByAppendingFormat:@"true"];
 	} else {
-		output = [output stringByAppendingFormat:@"true="];
+		output = [output stringByAppendingFormat:@"false"];
 	}
 	// avoid
 	// tolls

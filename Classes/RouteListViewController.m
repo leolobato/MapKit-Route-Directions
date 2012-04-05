@@ -48,12 +48,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	UICGRoute *route = [routes objectAtIndex:section];
-    return [route numerOfSteps];
+    return [[route legAtIndex:0] numerOfSteps]; // todo
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	UICGRoute *route = [routes objectAtIndex:section];
-    return [route.summaryHtml stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    return route.summary;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -75,10 +75,10 @@
     }
     
 	UICGRoute *route = [routes objectAtIndex:indexPath.section];
-	UICGStep *step = [route stepAtIndex:indexPath.row];
+	UICGStep *step = [[route.legs objectAtIndex:0] stepAtIndex:indexPath.row];
     
 	UITextView *textView = (UITextView *)[cell viewWithTag:1];
-	[textView setContentToHTMLString:step.descriptionHtml];
+	[textView setContentToHTMLString:step.htmlInstructions];
 	
     return cell;
 }

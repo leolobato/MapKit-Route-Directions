@@ -16,10 +16,7 @@ typedef enum UICRouteAnnotationType {
 } UICRouteAnnotationType;
 
 @interface UICRouteAnnotation : NSObject<MKAnnotation> {
-	CLLocationCoordinate2D coordinate;
-	NSString *title;
-    NSString *subtitle;
-	UICRouteAnnotationType annotationType;
+	
 }
 
 @property (nonatomic) CLLocationCoordinate2D coordinate;
