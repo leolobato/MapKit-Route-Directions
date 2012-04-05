@@ -12,14 +12,32 @@
 @implementation RootViewController
 
 - (void)dealloc {
+    [startAddress release];
+    [endAddress release];
     [wayPointFields release];
     [super dealloc];
 }
 
+- (UITextField *)newWayPointFieldWithText:(NSString *)text;
+{
+    UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(66.0f, 11.0f, 236.0f, 22.0f)];
+    field.text = text;
+    return field;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-	wayPointFields = [[NSMutableArray alloc] init];
+    
+    if (!wayPointFields) {
+        wayPointFields = [[NSMutableArray alloc] init];        
+        
+        startAddress =  [@"Boston, Massachusetts, United States" retain];
+        endAddress = [@"Boston, Massachusetts, United States" retain];
+        [wayPointFields addObject:[[self newWayPointFieldWithText:@"Harvard University, University Hall, Cambridge, MA 02138-3800"] autorelease]];
+        [wayPointFields addObject:[[self newWayPointFieldWithText:@"1140 Boylston Street  Boston, MA 02115"] autorelease]];
+         [wayPointFields addObject:[[self newWayPointFieldWithText:@"77 Massachusetts Avenue  Cambridge, MA 02139-4307"] autorelease]];
+    }
 	
 	UIBarButtonItem *space = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
 	addButton = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addRow:)] autorelease];
@@ -44,7 +62,7 @@
 }
 
 - (void)addRow:(id)sender {
-	[wayPointFields addObject:[[[UITextField alloc] initWithFrame:CGRectMake(66.0f, 11.0f, 236.0f, 22.0f)] autorelease]];
+	[wayPointFields addObject:[[self newWayPointFieldWithText:nil] autorelease]];
 	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[wayPointFields count] inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
     
     removeButton.enabled = YES;
@@ -145,7 +163,7 @@
 		[inputField setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
 		[inputField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
 		
-		[inputField setText:[NSString stringWithUTF8String:"セルリアンタワー"]];
+		[inputField setText:startAddress];
 		
 		startField = inputField;
 	} else if (indexPath.section == 0 && indexPath.row == 1 + [wayPointFields count]) {
@@ -180,7 +198,7 @@
 		[inputField setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
 		[inputField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
 		
-		[inputField setText:[NSString stringWithUTF8String:"東京ディズニーランド"]];
+		[inputField setText:endAddress];
 		
 		endField = inputField;
 	} else if (indexPath.section == 0) {

@@ -7,6 +7,9 @@
 //
 
 @interface RootViewController : UITableViewController<UITextFieldDelegate> {
+    NSString *startAddress;
+    NSString *endAddress;
+    
 	UITextField *startField;
 	UITextField *endField;
 	NSMutableArray *wayPointFields;
