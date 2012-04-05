@@ -24,9 +24,11 @@ typedef enum UICRouteAnnotationType {
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic) UICRouteAnnotationType annotationType;
+@property (nonatomic, retain) NSString *subtitle;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coord 
 				   title:(NSString *)aTitle 
+				subtitle:(NSString *)aSubtitle
 		  annotationType:(UICRouteAnnotationType)type;
 
 @end

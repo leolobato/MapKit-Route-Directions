@@ -52,9 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	if (diretions.isInitialized) {
-		[self update];
-	}
+	[self update];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,6 +81,7 @@
 - (void)addPinAnnotation:(id)sender {
 	UICRouteAnnotation *pinAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[routeMapView centerCoordinate]
 																				  title:nil
+																			   subtitle:nil
 																		 annotationType:UICRouteAnnotationTypeWayPoint] autorelease];
 	[routeMapView addAnnotation:pinAnnotation];
 }
@@ -97,10 +96,6 @@
 }
 
 #pragma mark <UICGDirectionsDelegate> Methods
-
-- (void)directionsDidFinishInitialize:(UICGDirections *)directions {
-	[self update];
-}
 
 - (void)directions:(UICGDirections *)directions didFailInitializeWithError:(NSError *)error {
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -121,9 +116,11 @@
 	// Add annotations
 	UICRouteAnnotation *startAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[[routePoints objectAtIndex:0] coordinate]
 																					title:startPoint
+																				 subtitle:self.startPoint
 																		   annotationType:UICRouteAnnotationTypeStart] autorelease];
 	UICRouteAnnotation *endAnnotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[[routePoints lastObject] coordinate]
 																					title:endPoint
+																			   subtitle:self.endPoint
 																		   annotationType:UICRouteAnnotationTypeEnd] autorelease];
 	if ([wayPoints count] > 0) {
 		NSInteger numberOfRoutes = [directions numberOfRoutes];
@@ -132,6 +129,7 @@
 			CLLocation *location = [route endLocation];
 			UICRouteAnnotation *annotation = [[[UICRouteAnnotation alloc] initWithCoordinate:[location coordinate]
 																					   title:[[route endGeocode] objectForKey:@"address"]
+																					subtitle:nil
 																			  annotationType:UICRouteAnnotationTypeWayPoint] autorelease];
 			[routeMapView addAnnotation:annotation];
 		}

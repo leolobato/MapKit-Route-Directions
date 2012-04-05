@@ -12,7 +12,6 @@
 
 @synthesize dictionaryRepresentation;
 @synthesize location;
-@synthesize polylineIndex;
 @synthesize descriptionHtml;
 @synthesize distance;
 @synthesize duration;
@@ -27,21 +26,14 @@
 	if (self != nil) {
 		dictionaryRepresentation = [dictionary retain];
 		
-		NSDictionary *point = [dictionaryRepresentation objectForKey:@"Point"];
-		NSArray *coordinates = [point objectForKey:@"coordinates"];
-		CLLocationDegrees latitude  = [[coordinates objectAtIndex:0] doubleValue];
-		CLLocationDegrees longitude = [[coordinates objectAtIndex:1] doubleValue];
-		location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+		NSDictionary *endLocation = [dictionaryRepresentation objectForKey:@"end_location"];
+		CLLocationDegrees latitude  = [[endLocation objectForKey:@"lat"] doubleValue];
+		CLLocationDegrees longitude = [[endLocation objectForKey:@"lng"] doubleValue];
+		location = [[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] autorelease];
 		
-		id index = [dictionaryRepresentation objectForKey:@"polylineIndex"];
-		if (index == [NSNull null]) {
-			polylineIndex = -1;
-		} else {
-			polylineIndex = [index integerValue];
-		}
-		descriptionHtml = [[dictionaryRepresentation objectForKey:@"descriptionHtml"] copy];
-		distance = [[dictionaryRepresentation objectForKey:@"Distance"] copy];
-		duration = [[dictionaryRepresentation objectForKey:@"Duration"] copy];
+		descriptionHtml = [dictionaryRepresentation objectForKey:@"html_instructions"];
+		distance = [dictionaryRepresentation objectForKey:@"distance"];
+		duration = [dictionaryRepresentation objectForKey:@"duration"];
 	}
 	return self;
 }

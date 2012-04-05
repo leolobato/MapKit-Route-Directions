@@ -10,28 +10,18 @@
 #import "UICGDirectionsOptions.h"
 #import "UICGRoute.h"
 #import "UICGPolyline.h"
-#import "UICGoogleMapsAPI.h"
+#import "GoogleMapApiServices.h"
 
 @class UICGDirections;
 
 @protocol UICGDirectionsDelegate<NSObject>
 @optional
-- (void)directionsDidFinishInitialize:(UICGDirections *)directions;
-- (void)directions:(UICGDirections *)directions didFailInitializeWithError:(NSError *)error;
 - (void)directionsDidUpdateDirections:(UICGDirections *)directions;
 - (void)directions:(UICGDirections *)directions didFailWithMessage:(NSString *)message;
 @end
 
-@interface UICGDirections : NSObject<UIWebViewDelegate> {
-	id<UICGDirectionsDelegate> delegate;
-	UICGoogleMapsAPI *googleMapsAPI;
-	NSArray *routes;
-	NSArray *geocodes;
-	UICGPolyline *polyline;
-	NSDictionary *distance;
-	NSDictionary *duration;
-	NSDictionary *status;
-	BOOL isInitialized;
+@interface UICGDirections : NSObject {
+
 }
 
 @property (nonatomic, assign) id<UICGDirectionsDelegate> delegate;
@@ -45,14 +35,15 @@
 
 + (UICGDirections *)sharedDirections;
 - (id)init;
-- (void)makeAvailable;
-- (void)loadWithQuery:(NSString *)query options:(UICGDirectionsOptions *)options;
+
+@property (nonatomic, retain) GoogleMapApiServices *googleMapApiServices;
+
+@property (nonatomic, readonly) NSInteger numberOfRoutes;
+- (UICGRoute *)routeAtIndex:(NSInteger)index;
+@property (nonatomic, readonly) NSInteger numberOfGeocodes;
+- (NSDictionary *)geocodeAtIndex:(NSInteger)index;
+
 - (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options;
 - (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options;
-- (void)clear;
-- (NSInteger)numberOfRoutes;
-- (UICGRoute *)routeAtIndex:(NSInteger)index;
-- (NSInteger)numberOfGeocodes;
-- (NSDictionary *)geocodeAtIndex:(NSInteger)index;
 
 @end

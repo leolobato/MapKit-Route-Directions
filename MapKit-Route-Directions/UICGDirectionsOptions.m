@@ -6,46 +6,60 @@
 //  Copyright 2009 KISHIKAWA Katsumi. All rights reserved.
 //
 
+// http://code.google.com/apis/maps/documentation/directions/
+
 #import "UICGDirectionsOptions.h"
 
 @implementation UICGDirectionsOptions
 
-@synthesize locale;
-@synthesize travelMode;
-@synthesize avoidHighways;
-@synthesize getPolyline;
-@synthesize getSteps;
-@synthesize preserveViewport;
 @synthesize optimizeWaypoints;
+@synthesize travelMode, alternatives, avoidHighways, avoidTolls;
 
 - (id)init {
 	self = [super init];
 	if (self != nil) {
-		locale = [NSLocale currentLocale];
-		travelMode = UICGTravelModeDriving;
-		avoidHighways = NO;
-		getPolyline = YES;
-		getSteps = YES;
-		preserveViewport = NO;
+		self.travelMode = UICGTravelModeDriving;
+		self.alternatives = FALSE;
+		self.avoidHighways = FALSE;
+		self.avoidTolls = FALSE;
+		self.optimizeWaypoints = FALSE;
 	}
 	return self;
 }
 
-- (void)dealloc {
-	[locale release];
-	[super dealloc];
-}
-
-- (NSString *)JSONRepresentation {
-	return [NSString stringWithFormat:
-			@"{ 'locale': '%@', travelMode: %@, avoidHighways: %@, getPolyline: %@, getSteps: %@, preserveViewport: %@}", 
-			[locale localeIdentifier], 
-			travelMode == UICGTravelModeDriving ? @"G_TRAVEL_MODE_DRIVING" : @"G_TRAVEL_MODE_WALKING",
-			avoidHighways ? @"true" : @"false",
-			getPolyline ? @"true" : @"false",
-			getSteps ? @"true" : @"false",	
-			preserveViewport ? @"true" : @"false",	
-			optimizeWaypoints ? @"true" : @"false"];
+- (NSString *)parameterized
+{
+	NSString *output = @"";
+	
+	// travel mode
+	output = [output stringByAppendingFormat:@"mode="];
+	if (self.travelMode == UICGTravelModeDriving) {
+		output = [output stringByAppendingFormat:@"driving"];
+	} else if (self.travelMode == UICGTravelModeWalking) {
+		output = [output stringByAppendingFormat:@"walking"];
+	} else if (self.travelMode == UICGTravelModeBicycling) {
+		output = [output stringByAppendingFormat:@"bicycling"];
+	}
+	// alternative routes
+	output = [output stringByAppendingFormat:@"alternatives="];
+	if (self.alternatives) {
+		output = [output stringByAppendingFormat:@"true"];
+	} else {
+		output = [output stringByAppendingFormat:@"true="];
+	}
+	// avoid
+	// tolls
+	output = [output stringByAppendingFormat:@"avoid="];
+	if (self.avoidTolls) {
+		output = [output stringByAppendingFormat:@"tolls"];
+	}
+	// highways
+	output = [output stringByAppendingFormat:@"avoid="];
+	if (self.avoidHighways) {
+		output = [output stringByAppendingFormat:@"highways"];
+	}
+	
+	return output;
 }
 
 @end

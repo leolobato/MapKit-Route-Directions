@@ -22,6 +22,7 @@ static UICGDirections *sharedDirections;
 @synthesize duration;
 @synthesize status;
 @synthesize isInitialized;
+@synthesize googleMapApiServices;
 
 + (UICGDirections *)sharedDirections {
 	if (!sharedDirections) {
@@ -33,36 +34,42 @@ static UICGDirections *sharedDirections;
 - (id)init {
 	self = [super init];
 	if (self != nil) {
-		googleMapsAPI = [[UICGoogleMapsAPI alloc] init];
-		googleMapsAPI.delegate = self;
+		[[NSNotificationCenter defaultCenter]addObserver:self 
+												selector:@selector(googleMapsAPIDidGetObject:) 
+													name:GoogleMapDirectionsApiNotificationDidSucceed 
+												  object:nil];
+		[[NSNotificationCenter defaultCenter]addObserver:self 
+												selector:@selector(googleMapsAPIDidFail:) 
+													name:GoogleMapDirectionsApiNotificationDidFailed
+												  object:nil];
+		self.googleMapApiServices = [[[GoogleMapApiServices alloc]init]autorelease];
 	}
 	return self;
 }
 
-- (void)dealloc {
-	[googleMapsAPI release];
-	[routes release];
-	[geocodes release];
-	[polyline release];
-	[distance release];
-	[duration release];
-	[status release];
-	[super dealloc];
+- (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options
+{
+	[self.googleMapApiServices loadWithStartPoint:startPoint
+										 endPoint:endPoint 
+										  options:options.parameterized];
 }
 
-- (void)makeAvailable {
-	[googleMapsAPI makeAvailable];
+- (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options
+{
+	[self.googleMapApiServices loadFromWaypoints:waypoints
+										 options:options.parameterized];
 }
 
-- (void)goolgeMapsAPI:(UICGoogleMapsAPI *)goolgeMapsAPI didGetObject:(NSObject *)object {
-	NSDictionary *dictionary = (NSDictionary *)object;
+- (void)googleMapsAPIDidGetObject:(NSNotification *)notification 
+{
+	NSDictionary *dictionary = (NSDictionary *)[notification object];
 	NSArray *routeDics = [dictionary objectForKey:@"routes"];
 	routes = [[NSMutableArray alloc] initWithCapacity:[routeDics count]];
 	for (NSDictionary *routeDic in routeDics) {
 		[(NSMutableArray *)routes addObject:[UICGRoute routeWithDictionaryRepresentation:routeDic]];
+		self.polyline = [UICGPolyline polylineWithDictionaryRepresentation:[routeDic objectForKey:@"overview_polyline"]];
 	}
 	self.geocodes = [dictionary objectForKey:@"geocodes"];
-	self.polyline = [UICGPolyline polylineWithDictionaryRepresentation:[dictionary objectForKey:@"polyline"]];
 	self.distance = [dictionary objectForKey:@"distance"];
 	self.duration = [dictionary objectForKey:@"duration"];
 	self.status = [dictionary objectForKey:@"status"];
@@ -72,42 +79,13 @@ static UICGDirections *sharedDirections;
 	}
 }
 
-- (void)goolgeMapsAPI:(UICGoogleMapsAPI *)goolgeMapsAPI didFailWithMessage:(NSString *)message {
+- (void)googleMapsAPIDidFail:(NSNotification *)notification 
+{
+	NSString *message = (NSString *)[notification object]; // TODO check error case
+	
 	if ([self.delegate respondsToSelector:@selector(directions:didFailWithMessage:)]) {
 		[self.delegate directions:self didFailWithMessage:message];
 	}
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-	isInitialized = YES;
-	if ([self.delegate respondsToSelector:@selector(directionsDidFinishInitialize:)]) {
-		[self.delegate directionsDidFinishInitialize:self];
-	}
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(directions:didFailInitializeWithError:)]) {
-		[self.delegate directions:self didFailInitializeWithError:error];
-	}
-}
-
-- (void)loadWithQuery:(NSString *)query options:(UICGDirectionsOptions *)options {
-	[googleMapsAPI stringByEvaluatingJavaScriptFromString:
-	 [NSString stringWithFormat:@"loadDirections(%@, %@)", query, [options JSONRepresentation]]];
-}
-
-- (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options {
-	[googleMapsAPI stringByEvaluatingJavaScriptFromString:
-	 [NSString stringWithFormat:@"loadDirections('%@', '%@', %@)", startPoint, endPoint, [options JSONRepresentation]]];
-}
-
-- (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options {
-	[googleMapsAPI stringByEvaluatingJavaScriptFromString:
-	 [NSString stringWithFormat:@"loadFromWaypoints(%@, %@)", [waypoints JSONRepresentation], [options JSONRepresentation]]];
-}
-
-- (void)clear {
-	
 }
 
 - (NSInteger)numberOfRoutes {
@@ -124,6 +102,21 @@ static UICGDirections *sharedDirections;
 
 - (NSDictionary *)geocodeAtIndex:(NSInteger)index {
 	return [geocodes objectAtIndex:index];;
+}
+
+- (void)dealloc 
+{
+	[[NSNotificationCenter defaultCenter]removeObserver:self];
+	
+	[googleMapApiServices release];
+	[routes release];
+	[geocodes release];
+	[polyline release];
+	[distance release];
+	[duration release];
+	[status release];
+	
+	[super dealloc];
 }
 
 @end

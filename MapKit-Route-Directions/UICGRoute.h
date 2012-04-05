@@ -20,7 +20,6 @@
 	NSDictionary *startGeocode;
 	NSDictionary *endGeocode;
 	CLLocation *endLocation;
-	NSInteger polylineEndIndex;
 }
 
 @property (nonatomic, retain, readonly) NSDictionary *dictionaryRepresentation;
@@ -32,7 +31,6 @@
 @property (nonatomic, retain, readonly) NSDictionary *startGeocode;
 @property (nonatomic, retain, readonly) NSDictionary *endGeocode;
 @property (nonatomic, retain, readonly) CLLocation *endLocation;
-@property (nonatomic, assign, readonly) NSInteger polylineEndIndex;
 
 + (UICGRoute *)routeWithDictionaryRepresentation:(NSDictionary *)dictionary;
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary;

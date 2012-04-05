@@ -19,7 +19,6 @@
 @synthesize startGeocode;
 @synthesize endGeocode;
 @synthesize endLocation;
-@synthesize polylineEndIndex;
 
 + (UICGRoute *)routeWithDictionaryRepresentation:(NSDictionary *)dictionary {
 	UICGRoute *route = [[UICGRoute alloc] initWithDictionaryRepresentation:dictionary];
@@ -30,37 +29,27 @@
 	self = [super init];
 	if (self != nil) {
 		dictionaryRepresentation = [dictionary retain];
-        NSSet * setOfKeys = [dictionaryRepresentation keysOfEntriesPassingTest:^(id key, id obj, BOOL * stop){
-            if ([obj isKindOfClass:[NSDictionary class]]) {
-                for (NSString *keyString in [obj allKeys]) {
-                    if ([keyString isEqualToString:@"Steps"]) {
-                        *stop=YES;
-                        return YES;
-                    }
-                }
-            }
-            return NO;
-        }];
-        NSDictionary * k = [dictionaryRepresentation objectForKey:[setOfKeys anyObject]];
-        NSArray * stepDics = [k objectForKey:@"Steps"];
-        numerOfSteps = [stepDics count];
-		steps = [[NSMutableArray alloc] initWithCapacity:numerOfSteps];
-		for (NSDictionary *stepDic in stepDics) {
-			[(NSMutableArray *)steps addObject:[UICGStep stepWithDictionaryRepresentation:stepDic]];
+		NSArray *legs = [dictionaryRepresentation valueForKey:@"legs"];
+		if (legs.count > 0) {
+			NSDictionary *leg = [legs objectAtIndex:0];
+			NSArray *stepDics = [leg objectForKey:@"steps"];
+			numerOfSteps = [stepDics count];
+			steps = [[NSMutableArray alloc] initWithCapacity:numerOfSteps];
+			for (NSDictionary *stepDic in stepDics) {
+				[(NSMutableArray *)steps addObject:[UICGStep stepWithDictionaryRepresentation:stepDic]];
+			}
+			
+			endGeocode = [leg objectForKey:@"end_location"];
+			startGeocode = [leg objectForKey:@"start_location"];
+			
+			distance = [leg objectForKey:@"distance"];
+			duration = [leg objectForKey:@"duration"];
+			CLLocationDegrees longitude = [[endGeocode objectForKey:@"lat"] doubleValue];
+			CLLocationDegrees latitude  = [[endGeocode objectForKey:@"lng"] doubleValue];
+			endLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+			summaryHtml = [dictionaryRepresentation objectForKey:@"summary"];
 		}
-		
-		endGeocode = [dictionaryRepresentation objectForKey:@"MJ"];
-		startGeocode = [dictionaryRepresentation objectForKey:@"dT"];
-		
-		distance = [[k objectForKey:@"Distance"] copy];
-		duration = [[k objectForKey:@"Duration"] copy];
-		NSDictionary *endLocationDic = [[k objectForKey:@"End"] copy];
-		NSArray *coordinates = [[endLocationDic objectForKey:@"coordinates"] copy];
-		CLLocationDegrees longitude = [[coordinates objectAtIndex:0] doubleValue];
-		CLLocationDegrees latitude  = [[coordinates objectAtIndex:1] doubleValue];
-		endLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
-		summaryHtml = [[k objectForKey:@"summaryHtml"] copy];
-		polylineEndIndex = [[k objectForKey:@"polylineEndIndex"] integerValue];
+       
 	}
 	return self;
 }

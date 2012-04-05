@@ -11,7 +11,6 @@
 
 @interface UICGPolyline : NSObject {
 	NSDictionary *dictionaryRepresentation;
-	NSArray *vertices;
 	NSMutableArray *routePoints;
 	NSInteger vertexCount;
 	NSInteger length;
@@ -25,6 +24,5 @@
 + (UICGPolyline *)polylineWithDictionaryRepresentation:(NSDictionary *)dictionary;
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dictionary;
 - (CLLocation *)vertexAtIndex:(NSInteger)index;
-- (void)insertVertexAtIndex:(NSInteger)index inLocation:(CLLocation *)location;
 
 @end

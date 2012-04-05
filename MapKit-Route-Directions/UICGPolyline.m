@@ -24,41 +24,57 @@
 	self = [super init];
 	if (self != nil) {
 		dictionaryRepresentation = [dictionary retain];
-        
-        if (!vertices || (NSNull *)vertices == [NSNull null]) {
-            vertices = [[dictionaryRepresentation objectForKey:@"k"] retain];
-        }
-        if (!vertices || (NSNull *)vertices == [NSNull null]) {
-            vertices = [[dictionaryRepresentation objectForKey:@"g"] retain];
-        }
-        if (!vertices || (NSNull *)vertices == [NSNull null]) {
-            vertices = [[dictionaryRepresentation objectForKey:@"j"] retain];
-        }
-        
-        vertexCount = [vertices count];
-		routePoints = [NSMutableArray arrayWithCapacity:vertexCount];
-		for (NSDictionary *vertex in vertices) {
-			CLLocationDegrees latitude  = [[vertex objectForKey:@"y"] doubleValue];
-			CLLocationDegrees longitude = [[vertex objectForKey:@"x"] doubleValue];
-			CLLocation *location = [[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] autorelease];
-			[routePoints addObject:location];
+		
+		//NSString *levels = [dictionaryRepresentation valueForKey:@"levels"];
+		NSString *points = [dictionaryRepresentation valueForKey:@"points"];
+		
+		routePoints = [NSMutableArray arrayWithCapacity:0];
+		
+		// inspired by http://iphonegeeksworld.wordpress.com/2010/09/08/drawing-routes-onto-mkmapview-using-unofficial-google-maps-directions-api/
+		NSInteger len = [points length];
+		NSInteger index = 0;
+		NSInteger lat=0;
+		NSInteger lng=0;
+		while (index < len) {
+			NSInteger b;
+			NSInteger shift = 0;
+			NSInteger result = 0;
+			do {
+				b = [points characterAtIndex:index++] - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			NSInteger dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+			lat += dlat;
+			shift = 0;
+			result = 0;
+			do {
+				b = [points characterAtIndex:index++] - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			NSInteger dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+			lng += dlng;
+			NSNumber *latitude = [[[NSNumber alloc] initWithFloat:lat * 1e-5] autorelease];
+			NSNumber *longitude = [[[NSNumber alloc] initWithFloat:lng * 1e-5] autorelease];
+			printf("[%f,", [latitude doubleValue]);
+			printf("%f]", [longitude doubleValue]);
+			CLLocation *loc = [[[CLLocation alloc] initWithLatitude:[latitude floatValue] longitude:[longitude floatValue]] autorelease];
+			[routePoints addObject:loc];
 		}
+        
+        vertexCount = [routePoints count];
 	}
 	return self;
 }
 
 - (void)dealloc {
 	[dictionaryRepresentation release];
-	[vertices release];
 	[super dealloc];
 }
 
 - (CLLocation *)vertexAtIndex:(NSInteger)index {
 	return [routePoints objectAtIndex:index];
-}
-
-- (void)insertVertexAtIndex:(NSInteger)index inLocation:(CLLocation *)location {
-	//TODO
 }
 
 @end
