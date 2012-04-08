@@ -2,7 +2,8 @@
 #import <MapKit/MapKit.h>
 
 @interface UICRouteOverlay : NSObject {
-
+    NSArray *points;
+    MKPolyline *polyline;
 }
 
 + (id)routeOverlayWithPoints:(NSArray *)points;

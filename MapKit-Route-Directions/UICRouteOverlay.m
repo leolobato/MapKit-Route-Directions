@@ -80,6 +80,14 @@
 	
 }
 
+- (MKPolyline *)polyline;
+{
+    if (!polyline) {
+        [self loadRoute];
+    }
+    return polyline;
+}
+
 - (void)dealloc
 {
 	[points release];

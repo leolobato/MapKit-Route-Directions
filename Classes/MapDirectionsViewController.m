@@ -23,7 +23,17 @@
 	[startPoint release];
 	[endPoint release];
     [wayPoints release];
+    [routeOverlay release];
     [super dealloc];
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        useRouteOverlay = YES;
+    }
+    return self;
 }
 
 - (void)loadView {
@@ -37,7 +47,9 @@
 	[contentView addSubview:routeMapView];
 	[routeMapView release];
 	
-	routeOverlayView = [[UICRouteOverlayMapView alloc] initWithMapView:routeMapView];
+    if (!useRouteOverlay) {
+        routeOverlayView = [[UICRouteOverlayMapView alloc] initWithMapView:routeMapView];
+    }
 	
 	UIBarButtonItem *space = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
 	UIBarButtonItem *currentLocationButton = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reticle.png"] style:UIBarButtonItemStylePlain target:self action:@selector(moveToCurrentLocation:)] autorelease];
@@ -109,9 +121,17 @@
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
 	// Overlay polylines
-	UICGPolyline *polyline = [[directions routeAtIndex:0] overviewPolyline];
-	NSArray *routePoints = [polyline points];
-	[routeOverlayView setRoutes:routePoints];
+    UICGPolyline *polyline = [[directions routeAtIndex:0] overviewPolyline];
+    NSArray *routePoints = [polyline points];
+    if (useRouteOverlay) {
+        [routeOverlay release];
+        routeOverlay = nil;
+        
+        routeOverlay = [[UICRouteOverlay routeOverlayWithPoints:routePoints] retain];
+        [routeMapView addOverlay:routeOverlay.polyline];
+    } else {
+        [routeOverlayView setRoutes:routePoints];
+    }
 	
 	// Add annotations
 	// here we can have multiple routes todo
@@ -147,6 +167,10 @@
 		
 		[routeMapView addAnnotation:endAnnotation];
 	}
+    
+    if (useRouteOverlay) {
+        [routeMapView setVisibleMapRect:routeOverlay.mapRect animated:NO];
+    }
 }
 
 - (void)directions:(UICGDirections *)directions didFailWithMessage:(NSString *)message {
@@ -158,13 +182,37 @@
 
 #pragma mark <MKMapViewDelegate> Methods
 
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id )overlay
+{
+    MKOverlayView* overlayView = nil;
+    
+    if(routeOverlay && overlay == routeOverlay.polyline)
+    {
+        //if we have not yet created an overlay view for this overlay, create it now.
+        if (!polylineView)
+        {
+            polylineView = [[MKPolylineView alloc] initWithPolyline:routeOverlay.polyline];
+            polylineView.fillColor = [UIColor redColor];
+            polylineView.strokeColor = [UIColor redColor];
+            polylineView.lineWidth = 3;
+        }
+        overlayView = polylineView;
+    }
+    
+    return overlayView;
+}
+
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
-	routeOverlayView.hidden = YES;
+    if (!useRouteOverlay) {
+        routeOverlayView.hidden = YES;
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-	routeOverlayView.hidden = NO;
-	[routeOverlayView setNeedsDisplay];
+    if (!useRouteOverlay) {
+        routeOverlayView.hidden = NO;
+        [routeOverlayView setNeedsDisplay];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {

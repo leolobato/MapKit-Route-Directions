@@ -9,14 +9,19 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "UICGDirections.h"
+#import "UICRouteOverlay.h"
 
 @class UICRouteOverlayMapView;
 
 @interface MapDirectionsViewController : UIViewController<MKMapViewDelegate, UICGDirectionsDelegate> {
 	MKMapView *routeMapView;
 	UICRouteOverlayMapView *routeOverlayView;
+    UICRouteOverlay *routeOverlay;
+    MKPolylineView *polylineView;
 	UICGDirections *diretions;
 	UICGTravelModes travelMode;
+    
+    BOOL useRouteOverlay;
 }
 
 @property (nonatomic, retain) NSString *startPoint;

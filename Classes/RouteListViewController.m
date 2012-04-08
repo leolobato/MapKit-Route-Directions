@@ -25,7 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
 																							target:self 
 																							action:@selector(dismiss:)] autorelease];
 	self.title = NSLocalizedString(@"Routes", nil);
@@ -65,13 +65,12 @@
 		UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(20.0f, 2.0f, 280.0f, 56.0f)];
 		textView.editable = NO;
 		textView.scrollEnabled = NO;
-		textView.opaque = YES;
-		textView.backgroundColor = [UIColor whiteColor];
+		textView.backgroundColor = [UIColor clearColor];
 		textView.tag = 1;
 		[cell addSubview:textView];
         [textView release];
 		
-		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+		cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
 	UICGRoute *route = [routes objectAtIndex:indexPath.section];

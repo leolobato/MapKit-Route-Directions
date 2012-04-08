@@ -56,6 +56,7 @@
 		2899E5600DE3E45000AC0155 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E55F0DE3E45000AC0155 /* RootViewController.xib */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
+		428393821531E05000D62B64 /* UICRouteOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 428393811531E05000D62B64 /* UICRouteOverlay.m */; };
 		429A21EA152DE3CE00585B4A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 429A21E9152DE3CE00585B4A /* libz.dylib */; };
 		42FB8FA9152DFEE3001D9352 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FB8FA8152DFEE3001D9352 /* NSObject+SBJson.m */; };
 		42FB8FAE152DFF57001D9352 /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FB8FAD152DFF57001D9352 /* SBJsonStreamWriterAccumulator.m */; };
@@ -149,6 +150,8 @@
 		28C286DF0D94DF7D0034E888 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		428393801531E05000D62B64 /* UICRouteOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICRouteOverlay.h; sourceTree = "<group>"; };
+		428393811531E05000D62B64 /* UICRouteOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICRouteOverlay.m; sourceTree = "<group>"; };
 		429A21E9152DE3CE00585B4A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42FB8FA6152DFED9001D9352 /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
 		42FB8FA7152DFEE3001D9352 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
@@ -211,6 +214,8 @@
 		14C8839D1031A5A200079F9E /* MapKit Extention */ = {
 			isa = PBXGroup;
 			children = (
+				428393801531E05000D62B64 /* UICRouteOverlay.h */,
+				428393811531E05000D62B64 /* UICRouteOverlay.m */,
 				14C87E5F102F31C600079F9E /* UICRouteOverlayMapView.h */,
 				14C87E60102F31C600079F9E /* UICRouteOverlayMapView.m */,
 				14C88113102F610400079F9E /* UICRouteAnnotation.h */,
@@ -510,6 +515,7 @@
 				42FB8FB1152DFF66001D9352 /* SBJsonUTF8Stream.m in Sources */,
 				42FB8FB2152DFF8B001D9352 /* SBJsonStreamParserAccumulator.m in Sources */,
 				24911EC912ED937B009191BA /* UICGLeg.m in Sources */,
+				428393821531E05000D62B64 /* UICRouteOverlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
