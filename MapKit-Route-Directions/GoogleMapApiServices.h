@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "ASINetworkQueue.h"
 #import "ASIHTTPRequest.h"
+#import "UICGDirectionsOptions.h"
 
 #define GoogleMapDirectionsApiNotificationDidSucceed @"GoogleMapDirectionsApiNotificationDidSucceed"
 #define GoogleMapDirectionsApiNotificationDidFailed @"GoogleMapDirectionsApiNotificationDidFailed"
@@ -9,8 +10,8 @@
 
 }
 
-- (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(NSString *)options;
-- (void)loadFromWaypoints:(NSArray *)waypoints options:(NSString *)options;
+- (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options;
+- (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options;
 
 
 @end

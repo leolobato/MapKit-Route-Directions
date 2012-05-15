@@ -18,13 +18,15 @@
 
 #define GOOGLE_DIRECTIONS_PATH @"http://maps.googleapis.com/maps/api/directions/json?"
 
-- (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(NSString *)options
+- (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options
 {
+    NSString *optionsString = [options parameterized];
+    
 	NSString *url = [NSString stringWithFormat:@"%@origin=%@&destination=%@&sensor=false", 
 					 GOOGLE_DIRECTIONS_PATH,
 					 startPoint, 
 					 endPoint, 
-					 (options.length > 0) ? [NSString stringWithFormat:@"&%@", options] : @""
+					 (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
 					 ];
 	url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
@@ -35,12 +37,15 @@
 	[self.networkQueue go];
 }
 
-- (void)loadFromWaypoints:(NSArray *)waypoints options:(NSString *)options
+- (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options
 {
-	NSString *url = [NSString stringWithFormat:@"%@|%@&sensor=false", 
+    NSString *optionsString = [options parameterized];
+
+	NSString *url = [NSString stringWithFormat:@"%@waypoints=%@%@&sensor=false", 
 					 GOOGLE_DIRECTIONS_PATH,
+                     (options.optimizeWaypoints ? @"optimize:true|" : @""),
 					 [waypoints componentsJoinedByString:@"|"],
-					 (options.length > 0) ? [NSString stringWithFormat:@"&%@", options] : @""
+					 (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
 					 ];
 	
 	url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

@@ -52,13 +52,13 @@ static UICGDirections *sharedDirections;
 {
 	[self.googleMapApiServices loadWithStartPoint:startPoint
 										 endPoint:endPoint 
-										  options:options.parameterized];
+										  options:options];
 }
 
 - (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options
 {
 	[self.googleMapApiServices loadFromWaypoints:waypoints
-										 options:options.parameterized];
+										 options:options];
 }
 
 - (void)googleMapsAPIDidGetObject:(NSNotification *)notification 
