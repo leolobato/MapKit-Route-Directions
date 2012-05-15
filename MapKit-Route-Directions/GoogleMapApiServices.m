@@ -37,7 +37,7 @@
 
 - (void)loadFromWaypoints:(NSArray *)waypoints options:(NSString *)options
 {
-	NSString *url = [NSString stringWithFormat:@"%@waypoints=optimize:true|%@&sensor=false", 
+	NSString *url = [NSString stringWithFormat:@"%@|%@&sensor=false", 
 					 GOOGLE_DIRECTIONS_PATH,
 					 [waypoints componentsJoinedByString:@"|"],
 					 (options.length > 0) ? [NSString stringWithFormat:@"&%@", options] : @""
