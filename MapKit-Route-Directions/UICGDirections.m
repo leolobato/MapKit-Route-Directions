@@ -8,12 +8,11 @@
 
 #import "UICGDirections.h"
 #import "UICGRoute.h"
+#import "UICGGeocodedLocation.h"
 #import "SBJson.h"
 
 @interface UICGDirections ()
 
-//@property (nonatomic, retain) NSString *status;
-//@property (nonatomic, retain) NSArray *routes;
 @property (nonatomic) NSInteger numberOfRoutes;
 
 @end
@@ -23,7 +22,7 @@ static UICGDirections *sharedDirections;
 
 @implementation UICGDirections
 
-@synthesize status, routes, delegate, googleMapApiServices, numberOfRoutes;
+@synthesize status, routes, delegate, googleMapApiServices, numberOfRoutes, geocodedLocations;
 
 + (UICGDirections *)sharedDirections {
 	if (!sharedDirections) {
@@ -64,14 +63,29 @@ static UICGDirections *sharedDirections;
 - (void)googleMapsAPIDidGetObject:(NSNotification *)notification 
 {
 	NSDictionary *dictionary = (NSDictionary *)[notification object];
+    [status release];
 	status = [[dictionary objectForKey:@"status"]retain]; 
 	
 	NSArray *routesDict = [dictionary objectForKey:@"routes"];
-	routes = [[NSMutableArray arrayWithCapacity:[routesDict count]]retain];
-	for (NSDictionary *routeDict in routesDict) {
-		[(NSMutableArray *)self.routes addObject:[UICGRoute routeWithDictionaryRepresentation:routeDict]];
-	}	
+    [routes release];
+    routes = nil;
+    if (routesDict.count>0) {
+        routes = [[NSMutableArray arrayWithCapacity:[routesDict count]]retain];
+        for (NSDictionary *routeDict in routesDict) {
+            [(NSMutableArray *)self.routes addObject:[UICGRoute routeWithDictionaryRepresentation:routeDict]];
+        }	
+    }
 	self.numberOfRoutes = self.routes.count;
+    
+    NSArray *locationsDict = [dictionary objectForKey:@"results"];
+    [geocodedLocations release];
+    geocodedLocations = nil;
+    if (locationsDict.count>0) {
+        geocodedLocations = [[NSMutableArray arrayWithCapacity:[locationsDict count]]retain];
+        for (NSDictionary *locationDict in locationsDict) {
+            [(NSMutableArray *)self.geocodedLocations addObject:[UICGGeocodedLocation geocodedLocationWithDictionaryRepresentation:locationDict]];
+        }	
+    }
 	
 	if ([self.delegate respondsToSelector:@selector(directionsDidUpdateDirections:)]) {
 		[self.delegate directionsDidUpdateDirections:self];
@@ -99,6 +113,7 @@ static UICGDirections *sharedDirections;
 {
 	[[NSNotificationCenter defaultCenter]removeObserver:self];
 	
+    [geocodedLocations release];
 	[googleMapApiServices release];
 	[routes release];
 	[status release];

@@ -21,6 +21,7 @@
 @property (nonatomic, assign) id<UICGDirectionsDelegate> delegate;
 @property (nonatomic, readonly) NSString *status;
 @property (nonatomic, readonly) NSArray *routes;
+@property (nonatomic, readonly) NSArray *geocodedLocations;
 
 + (UICGDirections *)sharedDirections;
 - (id)init;

@@ -9,6 +9,7 @@
 #import "MapDirectionsViewController.h"
 #import "UICRouteOverlayMapView.h"
 #import "UICRouteAnnotation.h"
+#import "UICGGeocodedLocation.h"
 #import "RouteListViewController.h"
 
 @implementation MapDirectionsViewController
@@ -167,6 +168,16 @@
 		
 		[routeMapView addAnnotation:endAnnotation];
 	}
+    
+    for (UICGGeocodedLocation *geocodedLocation in directions.geocodedLocations) {
+        
+        UICRouteAnnotation *annotation = [[[UICRouteAnnotation alloc] initWithCoordinate:geocodedLocation.coordinate
+                                                                                   title:geocodedLocation.formattedAddress
+                                                                                subtitle:nil
+                                                                          annotationType:UICRouteAnnotationTypeWayPoint] autorelease];
+        [routeMapView addAnnotation:annotation];
+
+    }
     
     if (useRouteOverlay) {
         [routeMapView setVisibleMapRect:routeOverlay.mapRect animated:NO];

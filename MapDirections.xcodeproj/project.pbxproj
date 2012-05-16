@@ -58,6 +58,7 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		428393821531E05000D62B64 /* UICRouteOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 428393811531E05000D62B64 /* UICRouteOverlay.m */; };
 		429A21EA152DE3CE00585B4A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 429A21E9152DE3CE00585B4A /* libz.dylib */; };
+		42EB3BC61564100600E6075A /* UICGGeocodedLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB3BC51564100600E6075A /* UICGGeocodedLocation.m */; };
 		42FB8FA9152DFEE3001D9352 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FB8FA8152DFEE3001D9352 /* NSObject+SBJson.m */; };
 		42FB8FAE152DFF57001D9352 /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FB8FAD152DFF57001D9352 /* SBJsonStreamWriterAccumulator.m */; };
 		42FB8FB1152DFF66001D9352 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FB8FB0152DFF66001D9352 /* SBJsonUTF8Stream.m */; };
@@ -153,6 +154,8 @@
 		428393801531E05000D62B64 /* UICRouteOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICRouteOverlay.h; sourceTree = "<group>"; };
 		428393811531E05000D62B64 /* UICRouteOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICRouteOverlay.m; sourceTree = "<group>"; };
 		429A21E9152DE3CE00585B4A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		42EB3BC41564100600E6075A /* UICGGeocodedLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICGGeocodedLocation.h; sourceTree = "<group>"; };
+		42EB3BC51564100600E6075A /* UICGGeocodedLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICGGeocodedLocation.m; sourceTree = "<group>"; };
 		42FB8FA6152DFED9001D9352 /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
 		42FB8FA7152DFEE3001D9352 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
 		42FB8FA8152DFEE3001D9352 /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
@@ -233,6 +236,8 @@
 				14C87D39102F1FD500079F9E /* UICGDirections.m */,
 				14C87D40102F21A900079F9E /* UICGRoute.h */,
 				14C87D41102F21A900079F9E /* UICGRoute.m */,
+				42EB3BC41564100600E6075A /* UICGGeocodedLocation.h */,
+				42EB3BC51564100600E6075A /* UICGGeocodedLocation.m */,
 				24911EC712ED937B009191BA /* UICGLeg.h */,
 				24911EC812ED937B009191BA /* UICGLeg.m */,
 				14C882CE102F7E9400079F9E /* UICGStep.h */,
@@ -516,6 +521,7 @@
 				42FB8FB2152DFF8B001D9352 /* SBJsonStreamParserAccumulator.m in Sources */,
 				24911EC912ED937B009191BA /* UICGLeg.m in Sources */,
 				428393821531E05000D62B64 /* UICRouteOverlay.m in Sources */,
+				42EB3BC61564100600E6075A /* UICGGeocodedLocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

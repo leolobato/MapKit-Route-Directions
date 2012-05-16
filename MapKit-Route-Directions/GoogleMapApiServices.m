@@ -17,6 +17,7 @@
 #pragma mark Requests
 
 #define GOOGLE_DIRECTIONS_PATH @"http://maps.googleapis.com/maps/api/directions/json?"
+#define GOOGLE_GEOCODE_PATH @"http://maps.googleapis.com/maps/api/geocode/json?"
 
 - (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options
 {
@@ -39,16 +40,25 @@
 
 - (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options
 {
-    NSString *optionsString = [options parameterized];
+    NSString *url = nil;
+    
+    if (waypoints.count==1) {
+        url = [NSString stringWithFormat:@"%@address=%@&sensor=false", 
+               GOOGLE_GEOCODE_PATH,
+               [waypoints objectAtIndex:0]
+               ];
+    } else {
+        NSString *optionsString = [options parameterized];
 
-	NSString *url = [NSString stringWithFormat:@"%@waypoints=%@%@&sensor=false", 
-					 GOOGLE_DIRECTIONS_PATH,
-                     (options.optimizeWaypoints ? @"optimize:true|" : @""),
-					 [waypoints componentsJoinedByString:@"|"],
-					 (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
-					 ];
-	
-	url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        url = [NSString stringWithFormat:@"%@waypoints=%@%@&sensor=false", 
+               GOOGLE_DIRECTIONS_PATH,
+               (options.optimizeWaypoints ? @"optimize:true|" : @""),
+               [waypoints componentsJoinedByString:@"|"],
+               (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
+               ];
+        
+    }
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
 	ASIHTTPRequest *request = [self requestWithUrl:url];
 	request.delegate = self;
