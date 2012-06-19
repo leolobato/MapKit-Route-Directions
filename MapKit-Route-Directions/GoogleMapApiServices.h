@@ -12,6 +12,7 @@
 
 - (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options;
 - (void)loadFromWaypoints:(NSArray *)waypoints options:(UICGDirectionsOptions *)options;
+- (void)cancelAll;
 
 
 @end

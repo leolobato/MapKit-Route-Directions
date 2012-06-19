@@ -135,11 +135,23 @@
 	[[NSNotificationCenter defaultCenter]postNotificationName:GoogleMapDirectionsApiNotificationDidFailed object:[request.error localizedDescription]];
 }
 
+- (void)cancelAll;
+{
+    for (ASIHTTPRequest *request in [networkQueue operations]) {
+        [request cancel];
+    }
+}
+
 #pragma mark -
 #pragma mark Dealloc
 
 - (void)dealloc 
 {
+    [networkQueue setDelegate:nil];
+    for (ASIHTTPRequest *request in [networkQueue operations]) {
+        [request setDelegate:nil];
+        [request cancel];
+    }
 	[networkQueue release];
 	
     [super dealloc];
