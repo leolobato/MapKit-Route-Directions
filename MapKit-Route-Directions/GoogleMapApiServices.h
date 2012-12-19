@@ -5,6 +5,8 @@
 
 #define GoogleMapDirectionsApiNotificationDidSucceed @"GoogleMapDirectionsApiNotificationDidSucceed"
 #define GoogleMapDirectionsApiNotificationDidFailed @"GoogleMapDirectionsApiNotificationDidFailed"
+#define GoogleMapDirectionsKey @"GoogleMapDirectionsKey"
+#define GoogleMapDirectionsErrorKey @"GoogleMapDirectionsErrorKey"
 
 @interface GoogleMapApiServices : NSObject {
 

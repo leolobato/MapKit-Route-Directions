@@ -80,13 +80,25 @@
 		
 		
 		NSDictionary *directionsDict = (NSDictionary *)[json objectWithString:responseString error:&error];
-		if (!error && directionsDict && ![directionsDict isKindOfClass:[NSNull class]]) {		
-			[[NSNotificationCenter defaultCenter]postNotificationName:GoogleMapDirectionsApiNotificationDidSucceed object:directionsDict];
+		if (!error && directionsDict && ![directionsDict isKindOfClass:[NSNull class]]) {
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:directionsDict forKey:GoogleMapDirectionsKey];
+			[[NSNotificationCenter defaultCenter] postNotificationName:GoogleMapDirectionsApiNotificationDidSucceed
+                                                                object:self
+                                                              userInfo:userInfo];
 		} else {
-			[[NSNotificationCenter defaultCenter]postNotificationName:GoogleMapDirectionsApiNotificationDidFailed object:responseString];
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:responseString forKey:GoogleMapDirectionsKey];
+			[[NSNotificationCenter defaultCenter] postNotificationName:GoogleMapDirectionsApiNotificationDidFailed
+                                                                object:self
+                                                              userInfo:userInfo];
 		}
 	} else {
-		[[NSNotificationCenter defaultCenter]postNotificationName:GoogleMapDirectionsApiNotificationDidFailed object:[request.error localizedDescription]];
+        NSDictionary *userInfo = nil;
+        if (request.error) {
+            userInfo = [NSDictionary dictionaryWithObject:request.error forKey:GoogleMapDirectionsErrorKey];
+        }
+		[[NSNotificationCenter defaultCenter] postNotificationName:GoogleMapDirectionsApiNotificationDidFailed
+                                                            object:self
+                                                          userInfo:userInfo];
 	}
 	
 }

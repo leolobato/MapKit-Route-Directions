@@ -62,7 +62,11 @@ static UICGDirections *sharedDirections;
 
 - (void)googleMapsAPIDidGetObject:(NSNotification *)notification 
 {
-	NSDictionary *dictionary = (NSDictionary *)[notification object];
+    if (notification.object!=self.googleMapApiServices) {
+        return;
+    }
+    
+	NSDictionary *dictionary = (NSDictionary *)[[notification userInfo] objectForKey:GoogleMapDirectionsKey];
     [status release];
 	status = [[dictionary objectForKey:@"status"]retain]; 
 	
@@ -94,7 +98,12 @@ static UICGDirections *sharedDirections;
 
 - (void)googleMapsAPIDidFail:(NSNotification *)notification 
 {
-	NSString *message = (NSString *)[notification object]; // TODO check error case
+    if (notification.object!=self.googleMapApiServices) {
+        return;
+    }
+    
+    NSError *error = [[notification userInfo] objectForKey:GoogleMapDirectionsErrorKey];
+	NSString *message = error.localizedDescription;
 	
 	if ([self.delegate respondsToSelector:@selector(directions:didFailWithMessage:)]) {
 		[self.delegate directions:self didFailWithMessage:message];
