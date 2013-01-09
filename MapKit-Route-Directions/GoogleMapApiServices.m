@@ -21,13 +21,14 @@
 
 - (void)loadWithStartPoint:(NSString *)startPoint endPoint:(NSString *)endPoint options:(UICGDirectionsOptions *)options
 {
-    NSString *optionsString = [options parameterized];
+    // TODO: use options string
+//    NSString *optionsString = [options parameterized];
     
-	NSString *url = [NSString stringWithFormat:@"%@origin=%@&destination=%@&sensor=false", 
+	NSString *url = [NSString stringWithFormat:@"%@origin=%@&destination=%@&sensor=false",
 					 GOOGLE_DIRECTIONS_PATH,
 					 startPoint, 
-					 endPoint, 
-					 (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
+					 endPoint
+//					 (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
 					 ];
 	url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
@@ -48,13 +49,14 @@
                [waypoints objectAtIndex:0]
                ];
     } else {
-        NSString *optionsString = [options parameterized];
+        // TODO: use options string
+//        NSString *optionsString = [options parameterized];
 
-        url = [NSString stringWithFormat:@"%@waypoints=%@%@&sensor=false", 
+        url = [NSString stringWithFormat:@"%@waypoints=%@%@&sensor=false",
                GOOGLE_DIRECTIONS_PATH,
                (options.optimizeWaypoints ? @"optimize:true|" : @""),
-               [waypoints componentsJoinedByString:@"|"],
-               (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
+               [waypoints componentsJoinedByString:@"|"]
+//               (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
                ];
         
     }
