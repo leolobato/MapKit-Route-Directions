@@ -22,7 +22,7 @@ static UICGDirections *sharedDirections;
 
 @implementation UICGDirections
 
-@synthesize status, routes, delegate, googleMapApiServices, numberOfRoutes, geocodedLocations;
+@synthesize status, routes, delegate, googleMapApiServices, numberOfRoutes, geocodedLocations, apiResponse;
 
 + (UICGDirections *)sharedDirections {
 	if (!sharedDirections) {
@@ -67,6 +67,10 @@ static UICGDirections *sharedDirections;
     }
     
 	NSDictionary *dictionary = (NSDictionary *)[[notification userInfo] objectForKey:GoogleMapDirectionsKey];
+    
+    [apiResponse release];
+    apiResponse = [dictionary retain];
+    
     [status release];
 	status = [[dictionary objectForKey:@"status"]retain]; 
 	
@@ -118,7 +122,7 @@ static UICGDirections *sharedDirections;
 	return [self.routes objectAtIndex:index];
 }
 
-- (void)dealloc 
+- (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter]removeObserver:self];
 	
@@ -126,6 +130,7 @@ static UICGDirections *sharedDirections;
 	[googleMapApiServices release];
 	[routes release];
 	[status release];
+    [apiResponse release];
 	
 	[super dealloc];
 }

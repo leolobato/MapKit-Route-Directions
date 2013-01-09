@@ -22,6 +22,7 @@
 @property (nonatomic, readonly) NSString *status;
 @property (nonatomic, readonly) NSArray *routes;
 @property (nonatomic, readonly) NSArray *geocodedLocations;
+@property (nonatomic, readonly) NSDictionary *apiResponse;
 
 + (UICGDirections *)sharedDirections;
 - (id)init;
