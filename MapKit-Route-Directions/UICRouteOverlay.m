@@ -96,4 +96,18 @@
 	[super dealloc];
 }
 
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.points forKey:@"points"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if (self) {
+        self.points = [decoder decodeObjectForKey:@"points"];
+        [self loadRoute];
+    }
+    return self;
+}
 @end

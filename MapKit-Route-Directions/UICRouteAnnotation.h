@@ -15,7 +15,7 @@ typedef enum UICRouteAnnotationType {
 	UICRouteAnnotationTypeWayPoint,
 } UICRouteAnnotationType;
 
-@interface UICRouteAnnotation : NSObject<MKAnnotation> {
+@interface UICRouteAnnotation : NSObject<MKAnnotation,NSCoding> {
 	
 }
 

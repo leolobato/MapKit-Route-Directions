@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface UICRouteOverlay : NSObject {
+@interface UICRouteOverlay : NSObject <NSCoding> {
     NSArray *points;
     MKPolyline *polyline;
 }
