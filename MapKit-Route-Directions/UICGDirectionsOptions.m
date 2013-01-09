@@ -41,7 +41,7 @@
 		output = [output stringByAppendingFormat:@"bicycling"];
 	}
 	// alternative routes
-	output = [output stringByAppendingFormat:@"alternatives="];
+	output = [output stringByAppendingFormat:@"&alternatives="];
 	if (self.alternatives) {
 		output = [output stringByAppendingFormat:@"true"];
 	} else {
@@ -49,14 +49,12 @@
 	}
 	// avoid
 	// tolls
-	output = [output stringByAppendingFormat:@"avoid="];
 	if (self.avoidTolls) {
-		output = [output stringByAppendingFormat:@"tolls"];
+		output = [output stringByAppendingFormat:@"&avoid=tolls"];
 	}
 	// highways
-	output = [output stringByAppendingFormat:@"avoid="];
 	if (self.avoidHighways) {
-		output = [output stringByAppendingFormat:@"highways"];
+		output = [output stringByAppendingFormat:@"&avoid=highways"];
 	}
 	
 	return output;
