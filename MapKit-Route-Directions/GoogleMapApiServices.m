@@ -146,7 +146,13 @@
 
 - (void)fetchFailed:(ASIHTTPRequest *)request
 {
-	[[NSNotificationCenter defaultCenter]postNotificationName:GoogleMapDirectionsApiNotificationDidFailed object:[request.error localizedDescription]];
+    NSDictionary *userInfo = nil;
+    if (request.error) {
+        userInfo = [NSDictionary dictionaryWithObject:request.error forKey:GoogleMapDirectionsErrorKey];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:GoogleMapDirectionsApiNotificationDidFailed
+                                                        object:self
+                                                      userInfo:userInfo];
 }
 
 - (void)cancelAll;
