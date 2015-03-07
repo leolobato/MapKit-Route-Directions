@@ -43,30 +43,63 @@
 {
     NSString *url = nil;
     
+    // Escape waypoints to be used as parameter
+    NSMutableArray *escapedWaypoints = [NSMutableArray arrayWithCapacity:waypoints.count];
+    for (NSString *waypoint in waypoints) {
+        NSString *escapedWaypoint = [self escapedString:waypoint];
+        [escapedWaypoints addObject:escapedWaypoint];
+    }
+    
     if (waypoints.count==1) {
         url = [NSString stringWithFormat:@"%@address=%@&sensor=false", 
                GOOGLE_GEOCODE_PATH,
-               [waypoints objectAtIndex:0]
+               [escapedWaypoints firstObject]
                ];
-    } else {
+    } else if (waypoints.count>=2) {
         // TODO: use options string
 //        NSString *optionsString = [options parameterized];
-
-        url = [NSString stringWithFormat:@"%@waypoints=%@%@&sensor=false",
+        NSString *origin = [escapedWaypoints firstObject];
+        NSString *destination = [escapedWaypoints lastObject];
+        [escapedWaypoints removeLastObject];
+        [escapedWaypoints removeObjectAtIndex:0];
+        
+        NSString *params = nil;
+        if (escapedWaypoints.count>0) {
+            params = [NSString stringWithFormat:@"origin=%@&destination=%@&waypoints=%@%@&sensor=false",
+                      origin,
+                      destination,
+                      (options.optimizeWaypoints ? @"optimize:true|" : @""),
+                      [escapedWaypoints componentsJoinedByString:@"|"]
+                      ];
+        } else {
+            params = [NSString stringWithFormat:@"origin=%@&destination=%@&sensor=false",
+                      origin,
+                      destination
+                      ];
+        }
+        
+        url = [NSString stringWithFormat:@"%@%@",
                GOOGLE_DIRECTIONS_PATH,
-               (options.optimizeWaypoints ? @"optimize:true|" : @""),
-               [waypoints componentsJoinedByString:@"|"]
-//               (optionsString.length > 0) ? [NSString stringWithFormat:@"&%@", optionsString] : @""
-               ];
+               [params stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         
     }
-    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	
-	ASIHTTPRequest *request = [self requestWithUrl:url];
-	request.delegate = self;
-	
-	[self.networkQueue addOperation:request];
-	[self.networkQueue go];
+    
+    if (url) {
+        ASIHTTPRequest *request = [self requestWithUrl:url];
+        request.delegate = self;
+        
+        [self.networkQueue addOperation:request];
+        [self.networkQueue go];
+    }
+}
+
+- (NSString *)escapedString:(NSString *)string;
+{
+    // API has a URL limit of 2000 chars after encoded.
+    NSString *escapedString = [string stringByReplacingOccurrencesOfString:@", " withString:@","];
+    escapedString = [escapedString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+    escapedString = [escapedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return escapedString;
 }
 
 #pragma mark -
